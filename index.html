@@ -135,6 +135,7 @@
   .card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
   .card h3 { margin: 0; font-size: 1.4rem; }
   .lang { font-size: .8rem; color: var(--muted); }
+  .role { font-size: .7rem; font-weight: 400; vertical-align: middle; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); }
   .card p { color: var(--muted); margin: 8px 0 14px; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
   .tag { font-size: .75rem; padding: 3px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
@@ -218,7 +219,8 @@
     <p>
       I'm a computer science student who's genuinely excited about AI and loves learning by building.
       I like taking an idea, figuring out what makes it hard, and turning it into something that
-      actually works, like a backend that stays correct when a hundred people hit "buy" at once.
+      actually works, whether that's a camera-based coach that counts your reps or a backend that
+      stays correct when a hundred people hit "buy" at once.
     </p>
     <p>Right now I'm going deeper into AI, computer vision and how to build reliable software around it.</p>
   </section>
@@ -256,6 +258,21 @@
 <script>
   const projects = [
     {
+      name: "Tensa",
+      lang: "TypeScript",
+      role: "Co-built",
+      desc: "A calisthenics coach that lives in your camera. It watches you through the webcam, counts every rep and rates your form as you go, right in the browser with no app to install.",
+      image: "images/tensa.png",
+      live: "https://tensaa.vercel.app",
+      skills: ["TypeScript", "React", "Next.js", "Computer Vision", "MediaPipe"],
+      details: [
+        "MediaPipe pose detection tracks your body through a laptop or phone camera.",
+        "Counts each rep and calls out form fixes mid-set, like \"lift your hips into line\".",
+        "Pauses counting when part of you is out of frame instead of guessing.",
+        "My work: making rep counting and form scoring more accurate, with every fix backed by a test, plus UI work like the form report."
+      ]
+    },
+    {
       name: "StockFlow",
       lang: "Python",
       desc: "An inventory and order management system that stays correct when many requests hit it at once. FastAPI backend, PostgreSQL database and a React dashboard.",
@@ -272,21 +289,22 @@
   ];
 
   const skills = [
-    "Python", "TypeScript", "JavaScript", "React", "FastAPI", "PostgreSQL",
-    "SQLAlchemy", "Docker", "GitHub Actions", "pytest", "Git"
+    "Python", "TypeScript", "JavaScript", "React", "Next.js", "FastAPI", "PostgreSQL",
+    "SQLAlchemy", "Computer Vision", "MediaPipe", "Docker", "GitHub Actions", "pytest", "Git"
   ];
 
   // render projects
   const list = document.getElementById("projectList");
   list.innerHTML = projects.map(p => `
-    <article class="card" data-skills="${p.skills.join("|")}">
+    <article class="card" data-name="${p.name}" data-skills="${p.skills.join("|")}">
       <img src="${p.image}" alt="${p.name} screenshot" loading="lazy">
       <div class="card-body">
-        <div class="card-top"><h3>${p.name}</h3><span class="lang mono">${p.lang}</span></div>
+        <div class="card-top"><h3>${p.name}${p.role ? ` <span class="role mono">${p.role}</span>` : ""}</h3><span class="lang mono">${p.lang}</span></div>
         <p>${p.desc}</p>
         <div class="tags">${p.skills.map(s => `<span class="tag mono">${s}</span>`).join("")}</div>
         <div class="card-actions">
-          <a class="btn" href="${p.repo}" target="_blank" rel="noopener">View code →</a>
+          ${p.live ? `<a class="btn" href="${p.live}" target="_blank" rel="noopener">Live demo →</a>` : ""}
+          ${p.repo ? `<a class="btn" href="${p.repo}" target="_blank" rel="noopener">View code →</a>` : ""}
         </div>
         <details>
           <summary>What's interesting about it</summary>
@@ -312,7 +330,7 @@
       const has = card.dataset.skills.split("|").includes(active);
       card.classList.toggle("dim", active && !has);
       card.classList.toggle("match", active && has);
-      if (has) used.push(card.querySelector("h3").textContent);
+      if (has) used.push(card.dataset.name);
     });
     if (!active) hint.textContent = "";
     else if (used.length) hint.textContent = `→ used in ${used.join(" and ")}`;
