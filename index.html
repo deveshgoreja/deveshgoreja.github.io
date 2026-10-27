@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devesh Goreja</title>
+<meta name="description" content="Devesh Goreja — CS student, enthusiastic about AI and always learning.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --text: #1b1b1f;
+    --muted: #63636b;
+    --line: #e2dfd7;
+    --accent: #ff5a36;
+    --accent-soft: rgba(255, 90, 54, 0.12);
+    --glow: rgba(255, 90, 54, 0.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111114;
+      --surface: #1a1a1f;
+      --text: #f1f0ec;
+      --muted: #9b9aa3;
+      --line: #2b2b32;
+      --accent: #ff7a59;
+      --accent-soft: rgba(255, 122, 89, 0.15);
+      --glow: rgba(255, 122, 89, 0.09);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111114;
+    --surface: #1a1a1f;
+    --text: #f1f0ec;
+    --muted: #9b9aa3;
+    --line: #2b2b32;
+    --accent: #ff7a59;
+    --accent-soft: rgba(255, 122, 89, 0.15);
+    --glow: rgba(255, 122, 89, 0.09);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    transition: background .3s, color .3s;
+  }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  a { color: inherit; }
+
+  /* cursor spotlight */
+  .spotlight {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(500px circle at var(--x, 50%) var(--y, 30%), var(--glow), transparent 60%);
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+  /* nav */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-weight: 700; text-decoration: none; font-size: 1.1rem; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 18px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: .95rem; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .theme-btn {
+    border: 1px solid var(--line); background: var(--surface); color: var(--text);
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem;
+  }
+
+  /* hero */
+  .hero { padding: 110px 0 80px; }
+  .hello { color: var(--accent); font-size: .95rem; }
+  h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 1.05; margin: 10px 0 18px; letter-spacing: -0.03em; }
+  .typed-line { font-size: clamp(1.15rem, 3vw, 1.5rem); color: var(--muted); min-height: 2.2em; }
+  .typed { color: var(--text); border-right: 2px solid var(--accent); padding-right: 3px; animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { border-color: transparent; } }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 18px; border-radius: 999px; text-decoration: none; font-weight: 500;
+    border: 1px solid var(--line); background: var(--surface); cursor: pointer;
+    font: inherit; color: var(--text);
+    transition: transform .15s, border-color .15s;
+  }
+  .btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+  section { padding: 60px 0; }
+  h2 { font-size: 1.8rem; margin: 0 0 8px; letter-spacing: -0.02em; }
+  h2 .num { color: var(--accent); font-size: 1rem; margin-right: 8px; }
+  .sub { color: var(--muted); margin: 0 0 28px; }
+
+  /* about */
+  .about p { font-size: 1.1rem; max-width: 640px; }
+
+  /* skills */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    font: inherit; font-size: .92rem; cursor: pointer;
+    padding: 7px 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--text);
+    transition: all .15s;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .skill-hint { color: var(--muted); font-size: .85rem; margin-top: 14px; min-height: 1.4em; }
+
+  /* projects */
+  .projects { display: grid; gap: 22px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+    overflow: hidden; transition: transform .2s, border-color .2s, opacity .25s, box-shadow .2s;
+    transform-style: preserve-3d;
+  }
+  .card:hover { border-color: var(--accent); box-shadow: 0 12px 40px -18px var(--accent); }
+  .card.dim { opacity: .3; }
+  .card.match { border-color: var(--accent); }
+  .card img { width: 100%; display: block; aspect-ratio: 16 / 8; object-fit: cover; object-position: top; border-bottom: 1px solid var(--line); background: var(--line); }
+  .card-body { padding: 22px 24px 24px; }
+  .card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .card h3 { margin: 0; font-size: 1.4rem; }
+  .lang { font-size: .8rem; color: var(--muted); }
+  .card p { color: var(--muted); margin: 8px 0 14px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag { font-size: .75rem; padding: 3px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
+  .card-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .card-actions .btn { padding: 8px 14px; font-size: .9rem; }
+  details { margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  summary { cursor: pointer; font-weight: 500; color: var(--accent); list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "+ "; }
+  details[open] summary::before { content: "− "; }
+  details ul { margin: 10px 0 0; padding-left: 20px; color: var(--muted); }
+  details li { margin-bottom: 6px; }
+
+  /* contact */
+  .contact-box {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+    padding: 34px 28px; text-align: center;
+  }
+  .contact-box h2 { font-size: 2rem; }
+
+  footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 40px 0 50px; }
+
+  /* toast */
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
+    background: var(--text); color: var(--bg); padding: 10px 18px; border-radius: 999px;
+    font-size: .9rem; opacity: 0; transition: all .25s; z-index: 20; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 600px) {
+    .nav-links a:not(.keep) { display: none; }
+    .hero { padding: 70px 0 50px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .typed { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="spotlight" id="spotlight"></div>
+
+<nav>
+  <div class="wrap">
+    <a href="#top" class="logo">devesh<span>.</span></a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact" class="keep">Contact</a>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+  <header class="hero">
+    <div class="hello mono">hi there, I'm</div>
+    <h1>Devesh Goreja</h1>
+    <div class="typed-line">CS student who is <span class="typed" id="typed"></span></div>
+    <div class="cta">
+      <a class="btn primary" href="#projects">See my projects</a>
+      <a class="btn" href="https://github.com/deveshgoreja" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>
+        GitHub
+      </a>
+      <a class="btn" href="https://www.linkedin.com/in/devesh-goreja-513434288/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2Zm1.8 13.1H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </header>
+
+  <section id="about" class="about reveal">
+    <h2><span class="num mono">01</span>About me</h2>
+    <p>
+      I'm a computer science student who's genuinely excited about AI and loves learning by building.
+      I like taking an idea, figuring out what makes it hard, and turning it into something that
+      actually works, whether that's a pose-detection model running in the browser or a backend that
+      stays correct when a hundred people hit "buy" at once.
+    </p>
+    <p>Right now I'm going deeper into AI, computer vision and how to build reliable software around it.</p>
+  </section>
+
+  <section id="skills" class="reveal">
+    <h2><span class="num mono">02</span>Skills</h2>
+    <p class="sub">Click a skill to see which projects use it.</p>
+    <div class="chips" id="chips"></div>
+    <div class="skill-hint mono" id="skillHint"></div>
+  </section>
+
+  <section id="projects" class="reveal">
+    <h2><span class="num mono">03</span>Projects</h2>
+    <p class="sub">Things I've built. Expand a card for the interesting bits.</p>
+    <div class="projects" id="projectList"></div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <div class="contact-box">
+      <h2>Let's talk</h2>
+      <p class="sub">Always happy to chat about AI, projects or opportunities.</p>
+      <div class="cta" style="justify-content:center">
+        <a class="btn primary" href="mailto:deveshgoreja@gmail.com">Email me</a>
+        <button class="btn" id="copyEmail" type="button">Copy email</button>
+        <a class="btn" href="https://www.linkedin.com/in/devesh-goreja-513434288/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/deveshgoreja" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="mono">© <span id="year"></span> Devesh Goreja</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+  const projects = [
+    {
+      name: "FitCheck",
+      lang: "TypeScript",
+      desc: "Know how a T-shirt will fit before you buy it. Reads your body proportions from a single photo, compares them with the garment's real measurements, and recommends a size. The photo never leaves your browser.",
+      image: "https://raw.githubusercontent.com/deveshgoreja/FitCheck/main/docs/images/home.png",
+      repo: "https://github.com/deveshgoreja/FitCheck",
+      skills: ["TypeScript", "React", "Next.js", "Tailwind CSS", "Computer Vision", "MediaPipe", "Vitest"],
+      details: [
+        "Pose detection with MediaPipe finds shoulders, hips, elbows and ankles, then scales them using your height.",
+        "A fit engine measures the extra room a shirt gives in each area and labels it fitted, regular, relaxed or oversized.",
+        "Fully client-side: no server, so the photo stays private.",
+        "Draws the shirt outline on your photo to show where seams and hem should land."
+      ]
+    },
+    {
+      name: "StockFlow",
+      lang: "Python",
+      desc: "An inventory and order management system that stays correct when many requests hit it at once. FastAPI backend, PostgreSQL database and a React dashboard.",
+      image: "https://raw.githubusercontent.com/deveshgoreja/stockflow/main/docs/images/dashboard.png",
+      repo: "https://github.com/deveshgoreja/stockflow",
+      skills: ["Python", "FastAPI", "PostgreSQL", "SQLAlchemy", "React", "JavaScript", "Docker", "pytest", "GitHub Actions"],
+      details: [
+        "100 people buy the last unit at the same moment: exactly one succeeds and stock never goes negative.",
+        "Idempotency keys stop double-clicked orders from being created twice.",
+        "Consistent row-lock ordering prevents deadlocks between overlapping orders.",
+        "101 tests, including 8 concurrency tests that fire real parallel requests at a live server."
+      ]
+    }
+  ];
+
+  const skills = [
+    "Python", "TypeScript", "JavaScript", "React", "Next.js", "FastAPI", "PostgreSQL",
+    "SQLAlchemy", "Tailwind CSS", "Computer Vision", "MediaPipe", "Docker",
+    "GitHub Actions", "pytest", "Vitest", "Git"
+  ];
+
+  // render projects
+  const list = document.getElementById("projectList");
+  list.innerHTML = projects.map(p => `
+    <article class="card" data-skills="${p.skills.join("|")}">
+      <img src="${p.image}" alt="${p.name} screenshot" loading="lazy">
+      <div class="card-body">
+        <div class="card-top"><h3>${p.name}</h3><span class="lang mono">${p.lang}</span></div>
+        <p>${p.desc}</p>
+        <div class="tags">${p.skills.map(s => `<span class="tag mono">${s}</span>`).join("")}</div>
+        <div class="card-actions">
+          <a class="btn" href="${p.repo}" target="_blank" rel="noopener">View code →</a>
+        </div>
+        <details>
+          <summary>What's interesting about it</summary>
+          <ul>${p.details.map(d => `<li>${d}</li>`).join("")}</ul>
+        </details>
+      </div>
+    </article>`).join("");
+
+  // skills filter
+  const chips = document.getElementById("chips");
+  const hint = document.getElementById("skillHint");
+  const cards = [...document.querySelectorAll(".card")];
+  let active = null;
+  chips.innerHTML = skills.map(s => `<button class="chip" type="button">${s}</button>`).join("");
+  chips.addEventListener("click", e => {
+    const chip = e.target.closest(".chip");
+    if (!chip) return;
+    const skill = chip.textContent;
+    active = active === skill ? null : skill;
+    chips.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.textContent === active));
+    let used = [];
+    cards.forEach(card => {
+      const has = card.dataset.skills.split("|").includes(active);
+      card.classList.toggle("dim", active && !has);
+      card.classList.toggle("match", active && has);
+      if (has) used.push(card.querySelector("h3").textContent);
+    });
+    if (!active) hint.textContent = "";
+    else if (used.length) hint.textContent = `→ used in ${used.join(" and ")}`;
+    else hint.textContent = "→ part of my everyday toolkit";
+  });
+
+  // card tilt
+  cards.forEach(card => {
+    card.addEventListener("mousemove", e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(900px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg)`;
+    });
+    card.addEventListener("mouseleave", () => card.style.transform = "");
+  });
+
+  // typing effect
+  const phrases = ["enthusiastic about AI.", "always learning.", "building things to learn them.", "curious about computer vision."];
+  const typed = document.getElementById("typed");
+  let pi = 0, ci = 0, deleting = false;
+  function tick() {
+    const word = phrases[pi];
+    typed.textContent = word.slice(0, ci);
+    if (!deleting && ci < word.length) { ci++; setTimeout(tick, 70); }
+    else if (!deleting) { deleting = true; setTimeout(tick, 1600); }
+    else if (ci > 0) { ci--; setTimeout(tick, 35); }
+    else { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 300); }
+  }
+  tick();
+
+  // cursor spotlight
+  const spot = document.getElementById("spotlight");
+  window.addEventListener("pointermove", e => {
+    spot.style.setProperty("--x", e.clientX + "px");
+    spot.style.setProperty("--y", e.clientY + "px");
+  });
+
+  // theme toggle
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById("themeBtn").addEventListener("click", () => {
+    const isDark = root.dataset.theme
+      ? root.dataset.theme === "dark"
+      : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = isDark ? "light" : "dark";
+    try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
+  });
+
+  // copy email
+  const toast = document.getElementById("toast");
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1800);
+  }
+  document.getElementById("copyEmail").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText("deveshgoreja@gmail.com"); showToast("Email copied!"); }
+    catch (e) { showToast("deveshgoreja@gmail.com"); }
+  });
+
+  // scroll reveal + active nav link
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) en.target.classList.add("in"); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  const navLinks = [...document.querySelectorAll(".nav-links a")];
+  const navIo = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id));
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  document.querySelectorAll("section[id]").forEach(s => navIo.observe(s));
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
